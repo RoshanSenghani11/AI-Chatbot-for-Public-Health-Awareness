@@ -1,0 +1,36 @@
+sentence-transformers==2.2.2  # A powerful library for creating sentence embeddings.
+                              # It turns sentences into numerical vectors so machines can "understand" meaning and similarity.
+                              # Version 2.2.2 is specified to avoid version mismatch issues.
+
+langchain                     # A framework for building applications with LLMs (Large Language Models).
+                              # It helps you connect models, APIs, and data sources into a structured workflow.
+                              # Think of it as the glue that binds AI pieces together.
+
+flask                         # A lightweight web framework for Python.
+                              # It lets you build web applications and APIs easily.
+                              # Often used to serve your AI model as a web service or chatbot interface.
+
+pypdf                         # A Python library for working with PDF files.
+                              # It allows you to extract text, split, merge, or manipulate PDFs.
+                              # Very useful when feeding documents into your AI system.
+
+python-dotenv                 # A library to load environment variables from a `.env` file.
+                              # Helps you manage sensitive information (like API keys) without hardcoding them into your code.
+
+pinecone[grpc]                 # Pinecone is a vector database for storing and searching embeddings.
+                              # The `[grpc]` part means you're installing it with gRPC support,
+                              # which makes it faster and more efficient for large-scale vector searches.
+
+langchain-pinecone             # An integration package that connects LangChain with Pinecone.
+                              # Lets you store, retrieve, and manage embeddings inside Pinecone seamlessly.
+
+langchain-community            # A set of community-contributed modules and integrations for LangChain.
+                              # Expands LangChain’s functionality with more tools, connectors, and experiments.
+
+langchain-openai               # The LangChain integration for OpenAI.
+                              # Lets you use GPT models (like ChatGPT) within the LangChain framework.
+
+langchain-experimental         # Cutting-edge and experimental features for LangChain.
+                              # These are not fully stable but allow you to try the latest innovations.
+
+-e .
