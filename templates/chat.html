@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Chatbot for Public Health</title>
+  <style>
+    /* Reset some default styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #e6f0ff;
+      color: #003366;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #004080;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .chatbot-container {
+      background: white;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 64, 128, 0.3);
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+    }
+
+    .chat-header {
+      background-color: #0073e6;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      font-weight: 600;
+      font-size: 1.25rem;
+      text-align: center;
+      user-select: none;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      overflow-y: auto;
+      background: #f0f7ff;
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      max-width: 80%;
+      padding: 0.75rem 1rem;
+      border-radius: 15px;
+      line-height: 1.4;
+      font-size: 1rem;
+      word-wrap: break-word;
+    }
+
+    .message.user {
+      background-color: #cce0ff;
+      color: #003366;
+      align-self: flex-end;
+      border-bottom-right-radius: 0;
+    }
+
+    .message.bot {
+      background-color: #0073e6;
+      color: white;
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+    }
+
+    .chat-input-area {
+      display: flex;
+      border-top: 1px solid #cce0ff;
+      padding: 1rem 1.5rem;
+      background: #e6f0ff;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .chat-input-area input[type="text"] {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid #0073e6;
+      border-radius: 25px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .chat-input-area input[type="text"]:focus {
+      border-color: #004080;
+    }
+
+    .chat-input-area button {
+      background-color: #0073e6;
+      border: none;
+      color: white;
+      padding: 0 1.5rem;
+      margin-left: 1rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .chat-input-area button:hover {
+      background-color: #004080;
+    }
+
+    footer {
+      background-color: #004080;
+      color: white;
+      text-align: center;
+      padding: 1rem 2rem;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    @media (max-width: 640px) {
+      .chatbot-container {
+        height: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AI Chatbot for Public Health</h1>
+  </header>
+
+  <main>
+    <section class="chatbot-container" aria-label="Chatbot interface">
+      <div class="chat-header">Ask me about Public Health</div>
+      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-relevant="additions">
+        <!-- Chat messages will appear here -->
+        <div class="message bot">Hello! How can I assist you with public health today?</div>
+      </div>
+      <form class="chat-input-area" id="chatForm" aria-label="Send message form">
+        <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off" required aria-required="true" />
+        <button type="submit" aria-label="Send message">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2024 AI Chatbot for Public Health. All rights reserved.
+  </footer>
+
+  <script>
+    // Basic frontend chat interaction (no AI backend)
+    const chatForm = document.getElementById('chatForm');
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+
+    chatForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      // Add user message
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.classList.add('message', 'user');
+      userMsgDiv.textContent = message;
+      chatMessages.appendChild(userMsgDiv);
+
+      // Scroll to bottom
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // Clear input
+      userInput.value = '';
+
+       // Send to Flask backend
+    fetch('/get', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        msg: message
+      })
+    })
+    .then(response => response.text())
+    .then(data => {
+      // Show AI response
+      const botMsgDiv = document.createElement('div');
+      botMsgDiv.classList.add('message', 'bot');
+      botMsgDiv.textContent = data;
+      chatMessages.appendChild(botMsgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    })
+    .catch(err => {
+      console.error(err);
+      const errorMsgDiv = document.createElement('div');
+      errorMsgDiv.classList.add('message', 'bot');
+      errorMsgDiv.textContent = "Oops! Something went wrong.";
+      chatMessages.appendChild(errorMsgDiv);
+    });
+
+      // Simulate bot response (placeholder)
+    //   setTimeout(() => {
+    //     const botMsgDiv = document.createElement('div');
+    //     botMsgDiv.classList.add('message', 'bot');
+    //     botMsgDiv.textContent = "Thanks for your question! I'm here to help with public health info.";
+    //     chatMessages.appendChild(botMsgDiv);
+    //     chatMessages.scrollTop = chatMessages.scrollHeight;
+    //   }, 1000);
+    });
+  </script>
+</body>
+</html> 
