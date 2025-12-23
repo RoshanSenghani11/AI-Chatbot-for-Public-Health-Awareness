@@ -1,239 +1,588 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Chatbot for Public Health</title>
-  <style>
-    /* Reset some default styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background: #e6f0ff;
-      color: #003366;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    header {
-      background-color: #004080;
-      padding: 1.5rem 2rem;
-      text-align: center;
-      color: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-
-    header h1 {
-      font-weight: 700;
-      font-size: 2rem;
-      letter-spacing: 1px;
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    .chatbot-container {
-      background: white;
-      width: 100%;
-      max-width: 600px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 64, 128, 0.3);
-      display: flex;
-      flex-direction: column;
-      height: 600px;
-    }
-
-    .chat-header {
-      background-color: #0073e6;
-      color: white;
-      padding: 1rem 1.5rem;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      font-weight: 600;
-      font-size: 1.25rem;
-      text-align: center;
-      user-select: none;
-    }
-
-    .chat-messages {
-      flex: 1;
-      padding: 1rem 1.5rem;
-      overflow-y: auto;
-      background: #f0f7ff;
-    }
-
-    .message {
-      margin-bottom: 1rem;
-      max-width: 80%;
-      padding: 0.75rem 1rem;
-      border-radius: 15px;
-      line-height: 1.4;
-      font-size: 1rem;
-      word-wrap: break-word;
-    }
-
-    .message.user {
-      background-color: #cce0ff;
-      color: #003366;
-      align-self: flex-end;
-      border-bottom-right-radius: 0;
-    }
-
-    .message.bot {
-      background-color: #0073e6;
-      color: white;
-      align-self: flex-start;
-      border-bottom-left-radius: 0;
-    }
-
-    .chat-input-area {
-      display: flex;
-      border-top: 1px solid #cce0ff;
-      padding: 1rem 1.5rem;
-      background: #e6f0ff;
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
-    }
-
-    .chat-input-area input[type="text"] {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border: 1px solid #0073e6;
-      border-radius: 25px;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.3s ease;
-    }
-
-    .chat-input-area input[type="text"]:focus {
-      border-color: #004080;
-    }
-
-    .chat-input-area button {
-      background-color: #0073e6;
-      border: none;
-      color: white;
-      padding: 0 1.5rem;
-      margin-left: 1rem;
-      border-radius: 25px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .chat-input-area button:hover {
-      background-color: #004080;
-    }
-
-    footer {
-      background-color: #004080;
-      color: white;
-      text-align: center;
-      padding: 1rem 2rem;
-      font-size: 0.9rem;
-      user-select: none;
-    }
-
-    @media (max-width: 640px) {
-      .chatbot-container {
-        height: 500px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCure AI | Advanced Health Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-  <header>
-    <h1>AI Medibot for Public Health Care</h1>
-  </header>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="nav-container">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    MediCure AI
+                </div>
 
-  <main>
-    <section class="chatbot-container" aria-label="Chatbot interface">
-      <div class="chat-header">Welcome to MediCure! 🩺</div>
-      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-relevant="additions">
-        <!-- Chat messages will appear here -->
-        <div class="message bot">Namaste 🙏🏻 How can I help with your health today?</div>
-      </div>
-      <form class="chat-input-area" id="chatForm" aria-label="Send message form">
-        <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off" required aria-required="true" />
-        <button type="submit" aria-label="Send message">Send</button>
-      </form>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+                    <li class="nav-item"><a href="#symptom-checker" class="nav-link">Symptom Checker</a></li>
+                    <li class="nav-item"><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                    <li class="nav-item"><a href="#alerts" class="nav-link">Alerts</a></li>
+                    <li class="nav-item"><a href="#history" class="nav-link">History</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                    <div class="mobile-auth">
+                        <button class="btn btn-ghost" id="mobileLoginBtn">Login</button>
+                        <button class="btn btn-primary" id="mobileSignupBtn">Sign Up</button>
+                    </div>
+                </ul>
+
+                <div class="auth-buttons">
+                    <button class="btn btn-ghost" id="loginBtn">Login</button>
+                    <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                </div>
+
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Your Personal <span>AI Health Assistant</span></h1>
+                    <p>Describe symptoms in any language, track your health metrics, and get AI-powered insights for
+                        better wellness.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary"
+                            onclick="document.getElementById('symptom-checker').scrollIntoView({behavior: 'smooth'})">Get
+                            Started</button>
+                        <button class="btn btn-outline">How It Works</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-card">
+                        <div class="card-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="card-content">
+                            <h4>AI Symptom Analysis</h4>
+                            <p>Instant health insights</p>
+                        </div>
+                    </div>
+                    <div class="floating-card">
+                        <div class="card-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="card-content">
+                            <h4>Health Tracking</h4>
+                            <p>Monitor your vitals</p>
+                        </div>
+                    </div>
+                    <div class="floating-card">
+                        <div class="card-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="card-content">
+                            <h4>Smart Alerts</h4>
+                            <p>Vaccination reminders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-  </main>
 
-  <footer>
-    &copy; 2025 AI MediBot for Public Health Care. All rights reserved.
-  </footer>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Advanced Healthcare Features</h2>
+                <p class="section-subtitle">Our platform combines cutting-edge AI technology with comprehensive health
+                    monitoring tools</p>
+            </div>
 
-  <script>
-    // Basic frontend chat interaction (no AI backend)
-    const chatForm = document.getElementById('chatForm');
-    const chatMessages = document.getElementById('chatMessages');
-    const userInput = document.getElementById('userInput');
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Symptom Analysis</h3>
+                    <p>Describe your symptoms in any language and get AI-powered analysis based on medical databases.
+                    </p>
+                </div>
 
-    chatForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const message = userInput.value.trim();
-      if (!message) return;
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h3>Voice Assistant</h3>
+                    <p>Use voice commands in multiple languages to interact with our healthcare AI assistant.</p>
+                </div>
 
-      // Add user message
-      const userMsgDiv = document.createElement('div');
-      userMsgDiv.classList.add('message', 'user');
-      userMsgDiv.textContent = message;
-      chatMessages.appendChild(userMsgDiv);
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Health Dashboard</h3>
+                    <p>Track your heart rate, symptoms, and overall health with interactive charts and visualizations.
+                    </p>
+                </div>
 
-      // Scroll to bottom
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bluetooth-b"></i>
+                    </div>
+                    <h3>Bluetooth Connectivity</h3>
+                    <p>Connect your health devices to automatically sync data with your health dashboard.</p>
+                </div>
 
-      // Clear input
-      userInput.value = '';
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Pandemic Alerts</h3>
+                    <p>Receive timely alerts about pandemic situations and vaccination opportunities in your area.</p>
+                </div>
 
-       // Send to Flask backend
-    fetch('/get', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        msg: message
-      })
-    })
-    .then(response => response.text())
-    .then(data => {
-      // Show AI response
-      const botMsgDiv = document.createElement('div');
-      botMsgDiv.classList.add('message', 'bot');
-      botMsgDiv.textContent = data;
-      chatMessages.appendChild(botMsgDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    })
-    .catch(err => {
-      console.error(err);
-      const errorMsgDiv = document.createElement('div');
-      errorMsgDiv.classList.add('message', 'bot');
-      errorMsgDiv.textContent = "Oops! Something went wrong.";
-      chatMessages.appendChild(errorMsgDiv);
-    });
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Search History</h3>
+                    <p>Access your complete health search history to track symptoms and concerns over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      // Simulate bot response (placeholder)
-    //   setTimeout(() => {
-    //     const botMsgDiv = document.createElement('div');
-    //     botMsgDiv.classList.add('message', 'bot');
-    //     botMsgDiv.textContent = "Thanks for your question! I'm here to help with public health info.";
-    //     chatMessages.appendChild(botMsgDiv);
-    //     chatMessages.scrollTop = chatMessages.scrollHeight;
-    //   }, 1000);
-    });
-  </script>
+    <!-- Symptom Checker - Enhanced Chatbot -->
+    <section class="symptom-checker" id="symptom-checker">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">AI Health Assistant</h2>
+                <p class="section-subtitle">Chat with our AI assistant about your health concerns using text or voice
+                </p>
+            </div>
+
+            <div class="checker-container">
+                <div class="chat-container" id="chatbox">
+                    <div class="message ai-message">
+                        <p>Hello! I'm your AI health assistant. How can I help you today?
+                        </p>
+                    </div>
+                </div>
+
+                <div class="input-container">
+                    <textarea id="symptomInput"
+                        placeholder="Type your health question or describe your symptoms here... (Press Enter to send)"
+                        rows="3"></textarea>
+                    <button class="voice-btn" id="voiceBtn">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="btn btn-primary" id="sendBtn" style="margin-left: 10px;">Send</button>
+                </div>
+
+                <div class="input-actions">
+                    <div class="language-selector">
+                        <select id="languageSelect">
+                            <option value="en">English</option>
+                            <option value="hi">Hindi</option>
+                            <option value="hn">Hinglish</option>
+                            <option value="gu">Gujrati</option>
+                            <option value="bn">Bengali</option>
+                            <option value="pa">Punjabi</option>
+                            <option value="or">odia</option>
+                            <option value="ml">Malayalam</option>
+                            <option value="te">Telugu</option>
+                            <option value="bho">Bhojpuri</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-outline" id="clearChatBtn">
+                            <i class="fas fa-trash"></i> Clear Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Health Dashboard -->
+    <section class="dashboard" id="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h2 class="section-title">Health Dashboard</h2>
+                    <p class="section-subtitle">Comprehensive tracking of your health metrics and symptoms</p>
+                </div>
+                <div class="dashboard-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Heart Rate</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">72 <span style="font-size: 1rem; color: var(--gray);">bpm</span></div>
+                    <div class="metric-change">
+                        <i class="fas fa-arrow-down"></i> 5% from last week
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Blood Pressure</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">120/80 <span style="font-size: 1rem; color: var(--gray);">mmHg</span>
+                    </div>
+                    <div class="metric-change">
+                        <i class="fas fa-arrow-up"></i> 2% from last week
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Temperature</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-thermometer-half"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">98.6 <span style="font-size: 1rem; color: var(--gray);">°F</span></div>
+                    <div class="metric-change">
+                        <i class="fas fa-minus"></i> No change
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Oxygen Level</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-lungs"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">98 <span style="font-size: 1rem; color: var(--gray);">%</span></div>
+                    <div class="metric-change">
+                        <i class="fas fa-arrow-up"></i> 1% from last week
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Heart Rate History</h3>
+                        <select>
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>Last 3 months</option>
+                        </select>
+                    </div>
+                    <canvas id="heartRateChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Symptom Severity</h3>
+                        <select>
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>Last 3 months</option>
+                        </select>
+                    </div>
+                    <canvas id="symptomChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bluetooth-section">
+                <div class="bluetooth-content">
+                    <div class="bluetooth-icon">
+                        <i class="fas fa-bluetooth-b"></i>
+                    </div>
+                    <h3>Connect Health Devices</h3>
+                    <p>Sync your health monitoring devices via Bluetooth to automatically update your dashboard</p>
+                    <button class="btn btn-primary" id="connectBluetoothBtn">
+                        <i class="fas fa-bluetooth-b"></i> Connect Device
+                    </button>
+                    <p id="bluetoothStatus" style="margin-top: 15px; color: var(--gray);">Status: Not connected</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alerts Section -->
+    <section class="alerts" id="alerts">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Health Alerts</h2>
+                <p class="section-subtitle">Stay informed about pandemic situations and vaccination opportunities</p>
+            </div>
+
+            <div class="alerts-container">
+                <div class="alert-card">
+                    <div class="alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h3>Flu Season Alert</h3>
+                        <p>Increased flu activity reported in your area. Consider getting your flu vaccine.</p>
+                    </div>
+                    <div class="alert-date">2 days ago</div>
+                </div>
+
+                <div class="alert-card">
+                    <div class="alert-icon">
+                        <i class="fas fa-syringe"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h3>Vaccination Available</h3>
+                        <p>COVID-19 booster shots now available at local health centers.</p>
+                    </div>
+                    <div class="alert-date">1 week ago</div>
+                </div>
+
+                <div class="alert-card">
+                    <div class="alert-icon">
+                        <i class="fas fa-head-side-mask"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h3>Respiratory Illness Advisory</h3>
+                        <p>High pollen count and air quality alerts in effect for your region.</p>
+                    </div>
+                    <div class="alert-date">2 weeks ago</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Section -->
+    <section class="history" id="history">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Search History</h2>
+                <p class="section-subtitle">Review your previous symptom searches and health inquiries</p>
+            </div>
+
+            <div class="history-container">
+                <div class="history-item">
+                    <div class="history-content">
+                        <h3>Headache and dizziness</h3>
+                        <p>AI analysis: Possible causes include dehydration, stress, or migraine</p>
+                    </div>
+                    <div class="history-date">Today, 10:30 AM</div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-content">
+                        <h3>Chest discomfort when exercising</h3>
+                        <p>AI analysis: Recommended consultation with cardiologist</p>
+                    </div>
+                    <div class="history-date">Yesterday, 3:45 PM</div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-content">
+                        <h3>Seasonal allergy symptoms</h3>
+                        <p>AI analysis: Suggested antihistamines and environmental controls</p>
+                    </div>
+                    <div class="history-date">Oct 12, 2023</div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-content">
+                        <h3>Persistent cough for 2 weeks</h3>
+                        <p>AI analysis: Possible bronchitis, recommended seeing a doctor</p>
+                    </div>
+                    <div class="history-date">Oct 5, 2023</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Contact Us</h2>
+                <p class="section-subtitle">Get in touch if you're experiencing any issues with the website</p>
+            </div>
+
+            <div class="contact-container">
+                <form class="contact-form" id="contactForm" action="/api/contact" method="POST">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="What is this regarding?" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Describe the issue you're experiencing"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>MediCure AI</h3>
+                    <p>Your AI-powered health companion for symptom analysis and health monitoring.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#symptom-checker">Symptom Checker</a></li>
+                        <li><a href="#dashboard">Health Dashboard</a></li>
+                        <li><a href="#alerts">Alerts</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Health Articles</a></li>
+                        <li><a href="#">Symptom Library</a></li>
+                        <li><a href="#">Medical News</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Health St, Medical City</li>
+                        <li><i class="fas fa-phone"></i> +918786755555</li>
+                        <li><i class="fas fa-envelope"></i> support@medicureai.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 MediCure AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2 class="modal-title">Login to Your Account</h2>
+
+            <form id="loginForm" action="/api/login" method="POST">
+                <div class="form-group">
+                    <label for="loginPhone">Phone Number</label>
+                    <input type="tel" id="loginPhone" name="phone" placeholder="Enter your phone number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="Enter your password"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                </div>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px;">
+                Don't have an account? <a href="#" id="showSignup" style="color: var(--primary);">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2 class="modal-title">Create Your Account</h2>
+
+            <form id="signupForm" action="/api/signup" method="POST">
+                <div class="form-group">
+                    <label for="signupPhone">Phone Number</label>
+                    <input type="tel" id="signupPhone" name="phone" placeholder="Enter your phone number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Set Password</label>
+                    <input type="password" id="signupPassword" name="password" placeholder="Create a password" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" id="sendOtpBtn" style="width: 100%;">Send
+                        OTP</button>
+                </div>
+
+                <div class="form-group" id="otpSection" style="display: none;">
+                    <label for="otp">Enter OTP</label>
+                    <div class="otp-inputs">
+                        <input type="text" class="otp-input" maxlength="1" name="otp1" required>
+                        <input type="text" class="otp-input" maxlength="1" name="otp2" required>
+                        <input type="text" class="otp-input" maxlength="1" name="otp3" required>
+                        <input type="text" class="otp-input" maxlength="1" name="otp4" required>
+                        <input type="text" class="otp-input" maxlength="1" name="otp5" required>
+                        <input type="text" class="otp-input" maxlength="1" name="otp6" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="verifyOtpBtn"
+                        style="width: 100%; display: none;">Verify & Create Account</button>
+                </div>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px;">
+                Already have an account? <a href="#" id="showLogin" style="color: var(--primary);">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
-</html> 
+
+</html>
